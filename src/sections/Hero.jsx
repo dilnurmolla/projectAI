@@ -2,7 +2,7 @@ function Hero() {
     return (
         <section className="relative">
             <div className="mx-auto max-w-6xl px-4 py-10 md:py-16">
-                <div className="grid items-center gap-10 rounded-[32px] bg-gradient-to-b from-blue-700 via-blue-600 to-blue-500 p-8 shadow-sm md:grid-cols-2 md:p-12">
+                <div className="grid items-center gap-10 rounded-[32px] bg-[linear-gradient(180deg,#185ED8_0%,#2E6FDB_40%,#6C9EE5_100%)] p-8 shadow-sm md:grid-cols-2 md:p-12">
                     <div>
                         <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/90">
                             <span className="h-2 w-2 rounded-full bg-white" />
