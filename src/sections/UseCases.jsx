@@ -17,8 +17,7 @@ function UseCases() {
                     {items.map((x, i) => (
                         <div
                             key={i}
-                            className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-                        >
+                            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-[#1B5CFF]/30">
                             <div className="mt-1 h-10 w-10 rounded-2xl bg-blue-600" />
                             <div>
                                 <p className="text-sm font-semibold text-slate-900">{x.title}</p>

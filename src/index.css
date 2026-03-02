@@ -17,3 +17,7 @@ body {
   color: #0f172a;
   /* slate-900 */
 }
+
+html {
+  scroll-behavior: smooth;
+}

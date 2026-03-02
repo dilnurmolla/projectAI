@@ -16,7 +16,7 @@ function FAQ() {
 
                 <div className="mx-auto mt-10 max-w-3xl space-y-4">
                     {faqs.map((f, i) => (
-                        <div key={i} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div key={i} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:shadow-lg hover:border-[#1B5CFF]/30">
                             <p className="text-sm font-semibold text-slate-900">{f.q}</p>
                             <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.a}</p>
                         </div>

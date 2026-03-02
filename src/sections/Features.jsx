@@ -19,7 +19,7 @@ function Features() {
 
                 <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {cards.map((c) => (
-                        <div key={c.i} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div key={c.i} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-[#1B5CFF]/30">
                             <div className="h-10 w-10 rounded-2xl bg-blue-600" />
                             <h3 className="mt-4 text-lg font-semibold text-slate-900">{c.title}</h3>
                             <p className="mt-2 text-sm leading-relaxed text-slate-600">{c.desc}</p>

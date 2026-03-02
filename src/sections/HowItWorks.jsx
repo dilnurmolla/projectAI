@@ -15,7 +15,7 @@ function HowItWorks() {
 
                 <div className="mt-10 grid gap-4 lg:grid-cols-3">
                     {steps.map((s) => (
-                        <div key={s.k} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div key={s.k} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-[#1B5CFF]/30">
                             <div className="flex items-center justify-between">
                                 <p className="text-xs font-semibold text-slate-500">{s.k}</p>
                                 <div className="h-10 w-10 rounded-2xl bg-blue-600" />
