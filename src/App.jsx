@@ -1,31 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
-
-import Navbar from "./components/Navbar"
-import Hero from "./sections/Hero"
-import UseCases from "./sections/UseCases"
-import Features from "./sections/Features"
-import HowItWorks from "./sections/HowItWorks"
-import FAQ from "./sections/FAQ"
-import Footer from "./components/Footer"
-
-function App() {
-
+export default function App() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <Navbar />
-
-      <main>
-        <Hero />
-        <UseCases />
-        <Features />
-        <HowItWorks />
-        <FAQ />
-      </main>
-
-      <Footer />
-
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
