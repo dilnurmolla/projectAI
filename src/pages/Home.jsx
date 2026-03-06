@@ -2,7 +2,6 @@ import Navbar from "../components/Navbar";
 import Hero from "../sections/Hero";
 import UseCases from "../sections/UseCases";
 import Features from "../sections/Features";
-import HowItWorks from "../sections/HowItWorks";
 import FAQ from "../sections/FAQ";
 import Footer from "../components/Footer";
 
@@ -14,7 +13,6 @@ export default function Home() {
                 <Hero />
                 <UseCases />
                 <Features />
-                <HowItWorks />
                 <FAQ />
             </main>
             <Footer />
