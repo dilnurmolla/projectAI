@@ -51,7 +51,7 @@ export default function Login() {
             <div className="mx-auto w-full max-w-5xl overflow-hidden rounded-[28px] bg-white shadow-[0_22px_60px_-20px_rgba(15,23,42,0.25)]">
                 <div className="grid grid-cols-1 md:grid-cols-[440px_1fr]">
                     {/* LEFT BLUE PANEL */}
-                    <div className="bg-gradient-to-b from-[#1E62FF] to-[#174EE0] px-12 py-12 text-white flex flex-col justify-center">
+                    <div className="bg-[#1B5CFF] px-12 py-12 text-white flex flex-col justify-center">
                         <div className="flex items-center gap-3">
                             <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/15">
                                 <svg

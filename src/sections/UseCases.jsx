@@ -9,9 +9,12 @@ function UseCases() {
     return (
         <section className="border-y border-slate-200/60 bg-white">
             <div className="mx-auto max-w-6xl px-4 py-10">
-                <p className="text-center text-xs font-medium uppercase tracking-wider text-slate-500">
-                    Where it fits
-                </p>
+                <div className="mx-auto max-w-2xl text-center">
+                    <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+                        Hibe ve Destek Başvurularında<p>
+                            <span className="text-blue-900">Yeni Nesil Çözüm</span> </p>
+                    </h2>
+                </div>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {items.map((x, i) => (
