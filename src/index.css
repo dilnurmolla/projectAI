@@ -15,7 +15,15 @@ body {
   margin: 0;
   background: white;
   color: #0f172a;
-  font-family: "Poppins", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    "Poppins",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
 
   /* slate-900 */
 }

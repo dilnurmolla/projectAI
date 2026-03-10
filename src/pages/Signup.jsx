@@ -48,42 +48,39 @@ function GoogleIcon() {
   );
 }
 
-export default function Login() {
+export default function Signup() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
 
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState(params.get("email") || "");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const emailNormalized = useMemo(() => email.trim().toLowerCase(), [email]);
-  const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    setError("");
 
-    if (!emailNormalized.includes("@")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
+    if (!emailNormalized.includes("@")) return;
+    if (password.length < 4) return;
+    if (password !== confirmPassword) return;
 
     const users = JSON.parse(localStorage.getItem("projectAI_users") || "[]");
     const list = Array.isArray(users) ? users : [];
 
-    const user = list.find((u) => u.email === emailNormalized);
+    const emailExists = list.some((user) => user.email === emailNormalized);
 
-    if (!user) {
-      setError("No account found with this email.");
-      return;
-    }
-
-    if (user.password !== password) {
-      setError("Incorrect password.");
-      return;
+    if (!emailExists) {
+      list.push({
+        fullName: fullName.trim(),
+        email: emailNormalized,
+        password: password,
+      });
+      localStorage.setItem("projectAI_users", JSON.stringify(list));
     }
 
     localStorage.setItem("projectAI_auth", emailNormalized);
-
     navigate("/dashboard/new");
   }
 
@@ -92,19 +89,43 @@ export default function Login() {
       <div className="mx-auto my-10 w-full max-w-5xl overflow-hidden rounded-[28px] bg-white shadow-[0_22px_60px_-20px_rgba(15,23,42,0.25)]">
         <div className="grid grid-cols-1 md:grid-cols-[440px_1fr]">
           <div className="bg-[linear-gradient(180deg,#185ED8_0%,#2E6FDB_40%,#6C9EE5_100%)] px-12 py-12 text-white flex flex-col justify-center">
+            {" "}
             <div className="flex items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/15">
-                AI
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="opacity-95"
+                >
+                  <path
+                    d="M9 21h6"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M10 17h4"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M12 3a7 7 0 0 0-4 12c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2a7 7 0 0 0-4-12Z"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
               <span className="text-[26px] font-semibold tracking-tight text-white">
                 ProjectAI
               </span>
             </div>
-
             <p className="mt-6 max-w-sm text-sm text-white/85">
               Lorem ipsum dolor sit amet, consectetur.
             </p>
-
             <ul className="mt-10 space-y-3 text-sm text-white/90">
               <li className="flex gap-3">
                 <span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-white/80" />
@@ -119,62 +140,63 @@ export default function Login() {
 
           <div className="px-12 py-12 flex flex-col justify-center">
             <h1 className="text-[34px] font-semibold tracking-tight text-slate-900 text-center">
-              Welcome Back!
+              Create Account
             </h1>
             <p className="mt-2 text-sm text-slate-600 text-center">
-              Log in to your account
+              Sign up to get started
             </p>
 
             <form onSubmit={handleSubmit} className="mt-10 space-y-5">
-              {error && (
-                <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
-                  {error}
-                </div>
-              )}
+              <Input
+                label="Full Name"
+                placeholder="Your name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
               <Input
                 label="Email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <div className="space-y-2">
-                <Input
-                  label="Password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <div className="text-right">
-                  <button
-                    type="button"
-                    className="text-sm font-medium text-[#185ED8] hover:underline"
-                  >
-                    Forgot password?
-                  </button>
-                </div>
-              </div>
+              <Input
+                label="Password"
+                type="password"
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Input
+                label="Confirm Password"
+                type="password"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
 
               <button
                 type="submit"
                 className="
-                  mt-2 w-full rounded-full bg-[#185ED8] px-5 py-3
-                  text-sm font-semibold text-white shadow-sm hover:bg-[#1554C3]
-                  focus:outline-none focus:ring-4 focus:ring-[#6C9EE5]/35
-                "
+  mt-2 w-full rounded-full
+  bg-[#185ED8] px-5 py-3
+  text-sm font-semibold text-white
+  shadow-[0_14px_35px_-18px_rgba(24,94,216,0.9)]
+  hover:bg-[#1554C3]
+  focus:outline-none focus:ring-4 focus:ring-[#6C9EE5]/35
+"
               >
-                Log In
+                Sign Up
               </button>
 
               <div className="flex items-center gap-4 pt-1">
                 <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-xs text-slate-500">Or log in with</span>
+                <span className="text-xs text-slate-500">Or sign up with</span>
                 <div className="h-px flex-1 bg-slate-200" />
               </div>
 
               <button
                 type="button"
-                className=" relative z-10
+                className="
                   flex w-full items-center justify-center gap-3 rounded-full
                   border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800
                   hover:bg-slate-50
@@ -185,12 +207,12 @@ export default function Login() {
               </button>
 
               <p className="pt-2 text-center text-sm text-slate-600">
-                Don’t have an account?{" "}
+                Already have an account?{" "}
                 <Link
-                  to="/signup"
-                  className="font-semibold text-[#185ED8] hover:underline"
+                  to="/login"
+                  className="font-semibold text-[#1B5CFF] hover:underline"
                 >
-                  Sign up.
+                  Log in.
                 </Link>
               </p>
 
