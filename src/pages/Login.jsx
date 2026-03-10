@@ -84,7 +84,7 @@ export default function Login() {
 
     localStorage.setItem("projectAI_auth", emailNormalized);
 
-    navigate("/dashboard/new");
+    navigate("/dashboard/projects");
   }
 
   return (

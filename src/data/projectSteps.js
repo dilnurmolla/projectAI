@@ -1,6 +1,6 @@
 export const PROJECT_STEPS = [
-  { id: "setup", label: "Proje Kurulumu / Kimlik" },
   { id: "program", label: "Program Seçimi" },
+  { id: "setup", label: "Proje Kurulumu / Kimlik" },
   { id: "call", label: "Çağrı Seçimi" },
   { id: "company", label: "Şirket Bilgileri" },
   { id: "problem", label: "Problem Tanımı" },

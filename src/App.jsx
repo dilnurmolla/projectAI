@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -21,6 +21,7 @@ export default function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Navigate to="projects" replace />} />
             <Route path="new" element={<NewProject />} />
             <Route path="projects" element={<Projects />} />
             <Route path="templates" element={<Templates />} />

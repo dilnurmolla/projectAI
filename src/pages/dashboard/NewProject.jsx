@@ -1,6 +1,60 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useProject } from "../../context/ProjectContext";
 
+const PROGRAMS = [
+  {
+    id: "tubitak_1501",
+    name: "TÜBİTAK 1501",
+    desc: "Sanayi Ar-Ge Projeleri Destekleme Programı",
+    color: "bg-blue-50 text-blue-600 border-blue-200",
+    badge: "Popüler",
+  },
+  {
+    id: "tubitak_1507",
+    name: "TÜBİTAK 1507",
+    desc: "KOBİ Ar-Ge Başlangıç Destek Programı",
+    color: "bg-indigo-50 text-indigo-600 border-indigo-200",
+    badge: "KOBİ",
+  },
+  {
+    id: "kosgeb_ileri",
+    name: "KOSGEB İleri Girişimci",
+    desc: "İleri Girişimci Destek Programı",
+    color: "bg-emerald-50 text-emerald-600 border-emerald-200",
+  },
+  {
+    id: "horizon_europe",
+    name: "Horizon Europe",
+    desc: "Avrupa Birliği 9. Çerçeve Programı",
+    color: "bg-violet-50 text-violet-600 border-violet-200",
+    badge: "Global",
+  },
+  {
+    id: "kosgeb_arge",
+    name: "KOSGEB Ar-Ge, Ür-Ge ve İnovasyon",
+    desc: "Yeni fikir ve buluşlara yönelik Ar-Ge desteği",
+    color: "bg-teal-50 text-teal-600 border-teal-200",
+  },
+  {
+    id: "tejip",
+    name: "TİCARET BAKANLIĞI",
+    desc: "Küresel Tedarik Zinciri (KTZ) Destekleri",
+    color: "bg-amber-50 text-amber-600 border-amber-200",
+  },
+  {
+    id: "eureka",
+    name: "EUREKA",
+    desc: "Uluslararası Ar-Ge İşbirlikleri Ağ Programı",
+    color: "bg-fuchsia-50 text-fuchsia-600 border-fuchsia-200",
+  },
+  {
+    id: "custom",
+    name: "Özel Şablon / Diğer",
+    desc: "Kendi başlıklarını belirleyerek serbest taslak oluştur",
+    color: "bg-slate-50 text-slate-600 border-slate-200",
+  },
+];
+
 const ALL_IDES = [
   { id: "vscode", label: "VS Code", icon: "💻" },
   { id: "cursor", label: "Cursor AI", icon: "🤖" },
@@ -173,9 +227,21 @@ function AiPanel({ stepLabel }) {
   );
 }
 
-function StepContent({ stepId, onNext }) {
+function StepContent({ stepId, onNext, setActiveProjectName, addProject }) {
+  if (stepId === "program") {
+    return <ProgramSelection onNext={onNext} />;
+  }
+
   if (stepId === "setup") {
-    return <ProjectSetup onNext={onNext} />;
+    return (
+      <ProjectSetup
+        onNext={(name, desc) => {
+          setActiveProjectName(name);
+          addProject(name, desc);
+          onNext();
+        }}
+      />
+    );
   }
 
   return (
@@ -209,7 +275,13 @@ function StepContent({ stepId, onNext }) {
 }
 
 export default function NewProject() {
-  const { activeStepId, setActiveStepId, PROJECT_STEPS } = useProject();
+  const {
+    activeStepId,
+    setActiveStepId,
+    PROJECT_STEPS,
+    setActiveProjectName,
+    addProject,
+  } = useProject();
 
   const activeLabel = useMemo(
     () => PROJECT_STEPS.find((s) => s.id === activeStepId)?.label || "",
@@ -225,7 +297,12 @@ export default function NewProject() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-      <StepContent stepId={activeStepId} onNext={handleNext} />
+      <StepContent
+        stepId={activeStepId}
+        onNext={handleNext}
+        setActiveProjectName={setActiveProjectName}
+        addProject={addProject}
+      />
 
       <div className="flex flex-col gap-6">
         <AiPanel stepLabel={activeLabel} />
@@ -395,10 +472,112 @@ function ProjectSetup({ onNext }) {
       <div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
         <button
           disabled={!projectName.trim()}
-          onClick={onNext}
+          onClick={() => onNext(projectName, description)}
           className="rounded-full bg-[#1B5CFF] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1554C3] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Projeyi Başlat ve Devam Et
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ProgramSelection({ onNext }) {
+  const [selectedProgram, setSelectedProgram] = useState(null);
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="border-b border-slate-100 pb-5">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+          Program ve Şablon Seçimi
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Projenizin başvuracağı kurumu ve programı seçerek yapay zekanın ilgili
+          kılavuz kurallarına ve puanlama metriklerine göre çalışmasını
+          sağlayın.
+        </p>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {PROGRAMS.map((prog) => {
+          const isSelected = selectedProgram === prog.id;
+          return (
+            <div
+              key={prog.id}
+              onClick={() => setSelectedProgram(prog.id)}
+              className={`group relative cursor-pointer rounded-2xl border p-5 transition-all duration-200 ${
+                isSelected
+                  ? "border-[#1B5CFF] bg-[#F4F7FF] shadow-[0_0_0_1px_#1B5CFF]"
+                  : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
+              }`}
+            >
+              <div className="flex items-start justify-between">
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-xl border ${prog.color}`}
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                    />
+                  </svg>
+                </div>
+                {prog.badge && (
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-slate-600 uppercase">
+                    {prog.badge}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <h3
+                  className={`font-semibold ${
+                    isSelected ? "text-[#1B5CFF]" : "text-slate-900"
+                  }`}
+                >
+                  {prog.name}
+                </h3>
+                <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+                  {prog.desc}
+                </p>
+              </div>
+
+              {isSelected && (
+                <div className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#1B5CFF] text-white shadow-sm ring-2 ring-white">
+                  <svg
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
+        <button
+          disabled={!selectedProgram}
+          onClick={() => onNext()}
+          className="rounded-full bg-[#1B5CFF] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1554C3] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Şablonu Seç ve İlerle
         </button>
       </div>
     </div>

@@ -81,7 +81,7 @@ export default function Signup() {
     }
 
     localStorage.setItem("projectAI_auth", emailNormalized);
-    navigate("/dashboard/new");
+    navigate("/dashboard/projects");
   }
 
   return (

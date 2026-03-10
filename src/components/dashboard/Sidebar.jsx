@@ -17,9 +17,8 @@ function SidebarLink({ to, children }) {
       {({ isActive }) => (
         <>
           <span
-            className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-              isActive ? "bg-[#185ED8]" : "bg-slate-300"
-            }`}
+            className={`h-2.5 w-2.5 shrink-0 rounded-full ${isActive ? "bg-[#185ED8]" : "bg-slate-300"
+              }`}
           />
           {children}
         </>
@@ -33,14 +32,16 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   let activeStepId = null;
-  let setActiveStepId = () => {};
+  let setActiveStepId = () => { };
   let PROJECT_STEPS = [];
+  let activeProjectName = null;
   try {
     const projectContext = useProject();
     activeStepId = projectContext.activeStepId;
     setActiveStepId = projectContext.setActiveStepId;
     PROJECT_STEPS = projectContext.PROJECT_STEPS;
-  } catch (error) {}
+    activeProjectName = projectContext.activeProjectName;
+  } catch (error) { }
 
   const handleLogout = () => {
     localStorage.removeItem("projectAI_auth");
@@ -60,9 +61,13 @@ export default function Sidebar() {
       </div>
 
       <nav className="mt-4 space-y-2">
-        <SidebarLink to="/dashboard/new">Yeni Proje</SidebarLink>
+        {(location.pathname === "/dashboard/new" || activeProjectName) && (
+          <SidebarLink to="/dashboard/new">
+            {activeProjectName ? activeProjectName : "Yeni Proje"}
+          </SidebarLink>
+        )}
 
-        {location.pathname === "/dashboard/new" && (
+        {location.pathname === "/dashboard/new" && activeProjectName && (
           <div className="ml-6 mt-2 mb-4 space-y-1 border-l-2 border-slate-100 pl-3">
             {PROJECT_STEPS.map((step, idx) => {
               const isActive = step.id === activeStepId;
