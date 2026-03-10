@@ -3,55 +3,154 @@ import { useProject } from "../../context/ProjectContext";
 
 const PROGRAMS = [
   {
-    id: "tubitak_1501",
-    name: "TÜBİTAK 1501",
-    desc: "Sanayi Ar-Ge Projeleri Destekleme Programı",
-    color: "bg-blue-50 text-blue-600 border-blue-200",
+    id: "tubitak_1512",
+    name: "TÜBİTAK 1512 (BiGG)",
+    desc: "Teknoloji odaklı girişimler için çekirdek sermaye desteği.",
+    color: "bg-[#EFF5FF] text-[#1B5CFF] border-[#BFD4FF]",
     badge: "Popüler",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M13 10V3L4 14h7v7l9-11h-7z"
+        />
+      </svg>
+    ),
   },
   {
-    id: "tubitak_1507",
-    name: "TÜBİTAK 1507",
-    desc: "KOBİ Ar-Ge Başlangıç Destek Programı",
-    color: "bg-indigo-50 text-indigo-600 border-indigo-200",
-    badge: "KOBİ",
-  },
-  {
-    id: "kosgeb_ileri",
+    id: "kosgeb_yeni",
     name: "KOSGEB İleri Girişimci",
-    desc: "İleri Girişimci Destek Programı",
-    color: "bg-emerald-50 text-emerald-600 border-emerald-200",
+    desc: "Yeni girişimcilere kuruluş ve makine-teçhizat hibesi.",
+    color: "bg-[#F0FDF4] text-[#16A34A] border-[#BBF7D0]",
+    badge: "KOBİ / Girişim",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+        />
+      </svg>
+    ),
   },
   {
-    id: "horizon_europe",
-    name: "Horizon Europe",
-    desc: "Avrupa Birliği 9. Çerçeve Programı",
-    color: "bg-violet-50 text-violet-600 border-violet-200",
-    badge: "Global",
+    id: "ttgv",
+    name: "TTGV Finansmanı",
+    desc: "Türkiye Teknoloji Geliştirme Vakfı yatırım destekleri.",
+    color: "bg-[#ECFEFF] text-[#0891B2] border-[#A5F3FC]",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    ),
   },
   {
-    id: "kosgeb_arge",
-    name: "KOSGEB Ar-Ge, Ür-Ge ve İnovasyon",
-    desc: "Yeni fikir ve buluşlara yönelik Ar-Ge desteği",
-    color: "bg-teal-50 text-teal-600 border-teal-200",
+    id: "kalkinma",
+    name: "Kalkınma Ajansları",
+    desc: "Bölgesel projelere hibe ve kapasite geliştirme desteği.",
+    color: "bg-[#FFF7ED] text-[#EA580C] border-[#FFEDD5]",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    ),
   },
   {
-    id: "tejip",
-    name: "TİCARET BAKANLIĞI",
-    desc: "Küresel Tedarik Zinciri (KTZ) Destekleri",
-    color: "bg-amber-50 text-amber-600 border-amber-200",
+    id: "undp",
+    name: "Birleşmiş Milletler (UNDP)",
+    desc: "Sosyal girişim ve sürdürülebilirlik (SDG) odaklı hibe.",
+    color: "bg-[#F0F9FF] text-[#0284C7] border-[#BAE6FD]",
+    badge: "Sosyal Etki",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+        />
+      </svg>
+    ),
   },
   {
-    id: "eureka",
-    name: "EUREKA",
-    desc: "Uluslararası Ar-Ge İşbirlikleri Ağ Programı",
-    color: "bg-fuchsia-50 text-fuchsia-600 border-fuchsia-200",
+    id: "teydeb",
+    name: "TÜBİTAK TEYDEB",
+    desc: "Ölçeklenebilir sanayi Ar-Ge projelerine özel destekler.",
+    color: "bg-[#EFF6FF] text-[#1E3A8A] border-[#BFDBFE]",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+        />
+      </svg>
+    ),
   },
   {
-    id: "custom",
-    name: "Özel Şablon / Diğer",
-    desc: "Kendi başlıklarını belirleyerek serbest taslak oluştur",
-    color: "bg-slate-50 text-slate-600 border-slate-200",
+    id: "teknopark",
+    name: "Teknoparklar (TGB)",
+    desc: "Startup'lar için kuluçka, ofis ve vergi avantajı.",
+    color: "bg-[#FAF5FF] text-[#9333EA] border-[#E9D5FF]",
+    icon: (
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+        />
+      </svg>
+    ),
   },
 ];
 
@@ -148,11 +247,10 @@ function IdeSelector({ selectedIde, onChange }) {
                     setIsOpen(false);
                     setSearchTerm("");
                   }}
-                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
-                    selectedIde === ide.id
-                      ? "bg-[#EFF5FF] text-[#1B5CFF] font-medium"
-                      : "text-slate-700 hover:bg-slate-50"
-                  }`}
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${selectedIde === ide.id
+                    ? "bg-[#EFF5FF] text-[#1B5CFF] font-medium"
+                    : "text-slate-700 hover:bg-slate-50"
+                    }`}
                 >
                   <span className="text-lg">{ide.icon}</span>
                   <span>{ide.label}</span>
@@ -386,11 +484,10 @@ function ProjectSetup({ onNext }) {
           <h3 className="text-sm font-semibold text-slate-900">Proje Durumu</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label
-              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${
-                projectType === "scratch"
-                  ? "border-[#1B5CFF] bg-[#EFF5FF]"
-                  : "border-slate-200 bg-white hover:bg-slate-50"
-              }`}
+              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${projectType === "scratch"
+                ? "border-[#1B5CFF] bg-[#EFF5FF]"
+                : "border-slate-200 bg-white hover:bg-slate-50"
+                }`}
             >
               <input
                 type="radio"
@@ -402,11 +499,10 @@ function ProjectSetup({ onNext }) {
               />
               <div className="flex w-full items-start gap-3">
                 <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                    projectType === "scratch"
-                      ? "border-[#1B5CFF] bg-[#1B5CFF]"
-                      : "border-slate-300 bg-white"
-                  }`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${projectType === "scratch"
+                    ? "border-[#1B5CFF] bg-[#1B5CFF]"
+                    : "border-slate-300 bg-white"
+                    }`}
                 >
                   <div
                     className={`h-2 w-2 rounded-full ${projectType === "scratch" ? "bg-white" : "bg-transparent"}`}
@@ -426,11 +522,10 @@ function ProjectSetup({ onNext }) {
             </label>
 
             <label
-              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${
-                projectType === "existing"
-                  ? "border-[#1B5CFF] bg-[#EFF5FF]"
-                  : "border-slate-200 bg-white hover:bg-slate-50"
-              }`}
+              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${projectType === "existing"
+                ? "border-[#1B5CFF] bg-[#EFF5FF]"
+                : "border-slate-200 bg-white hover:bg-slate-50"
+                }`}
             >
               <input
                 type="radio"
@@ -442,11 +537,10 @@ function ProjectSetup({ onNext }) {
               />
               <div className="flex w-full items-start gap-3">
                 <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                    projectType === "existing"
-                      ? "border-[#1B5CFF] bg-[#1B5CFF]"
-                      : "border-slate-300 bg-white"
-                  }`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${projectType === "existing"
+                    ? "border-[#1B5CFF] bg-[#1B5CFF]"
+                    : "border-slate-300 bg-white"
+                    }`}
                 >
                   <div
                     className={`h-2 w-2 rounded-full ${projectType === "existing" ? "bg-white" : "bg-transparent"}`}
@@ -505,29 +599,16 @@ function ProgramSelection({ onNext }) {
             <div
               key={prog.id}
               onClick={() => setSelectedProgram(prog.id)}
-              className={`group relative cursor-pointer rounded-2xl border p-5 transition-all duration-200 ${
-                isSelected
-                  ? "border-[#1B5CFF] bg-[#F4F7FF] shadow-[0_0_0_1px_#1B5CFF]"
-                  : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
-              }`}
+              className={`group relative cursor-pointer rounded-2xl border p-5 transition-all duration-200 ${isSelected
+                ? "border-[#1B5CFF] bg-[#F4F7FF] shadow-[0_0_0_1px_#1B5CFF]"
+                : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
+                }`}
             >
               <div className="flex items-start justify-between">
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl border ${prog.color}`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl border ${prog.color} shadow-sm transition-transform group-hover:scale-110`}
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-                    />
-                  </svg>
+                  {prog.icon}
                 </div>
                 {prog.badge && (
                   <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-slate-600 uppercase">
@@ -538,9 +619,8 @@ function ProgramSelection({ onNext }) {
 
               <div className="mt-4">
                 <h3
-                  className={`font-semibold ${
-                    isSelected ? "text-[#1B5CFF]" : "text-slate-900"
-                  }`}
+                  className={`font-semibold ${isSelected ? "text-[#1B5CFF]" : "text-slate-900"
+                    }`}
                 >
                   {prog.name}
                 </h3>
