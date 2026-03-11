@@ -1,158 +1,10 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useProject } from "../../context/ProjectContext";
-
-const PROGRAMS = [
-  {
-    id: "tubitak_1512",
-    name: "TÜBİTAK 1512 (BiGG)",
-    desc: "Teknoloji odaklı girişimler için çekirdek sermaye desteği.",
-    color: "bg-[#EFF5FF] text-[#1B5CFF] border-[#BFD4FF]",
-    badge: "Popüler",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "kosgeb_yeni",
-    name: "KOSGEB İleri Girişimci",
-    desc: "Yeni girişimcilere kuruluş ve makine-teçhizat hibesi.",
-    color: "bg-[#F0FDF4] text-[#16A34A] border-[#BBF7D0]",
-    badge: "KOBİ / Girişim",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "ttgv",
-    name: "TTGV Finansmanı",
-    desc: "Türkiye Teknoloji Geliştirme Vakfı yatırım destekleri.",
-    color: "bg-[#ECFEFF] text-[#0891B2] border-[#A5F3FC]",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "kalkinma",
-    name: "Kalkınma Ajansları",
-    desc: "Bölgesel projelere hibe ve kapasite geliştirme desteği.",
-    color: "bg-[#FFF7ED] text-[#EA580C] border-[#FFEDD5]",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "undp",
-    name: "Birleşmiş Milletler (UNDP)",
-    desc: "Sosyal girişim ve sürdürülebilirlik (SDG) odaklı hibe.",
-    color: "bg-[#F0F9FF] text-[#0284C7] border-[#BAE6FD]",
-    badge: "Sosyal Etki",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "teydeb",
-    name: "TÜBİTAK TEYDEB",
-    desc: "Ölçeklenebilir sanayi Ar-Ge projelerine özel destekler.",
-    color: "bg-[#EFF6FF] text-[#1E3A8A] border-[#BFDBFE]",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "teknopark",
-    name: "Teknoparklar (TGB)",
-    desc: "Startup'lar için kuluçka, ofis ve vergi avantajı.",
-    color: "bg-[#FAF5FF] text-[#9333EA] border-[#E9D5FF]",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-        />
-      </svg>
-    ),
-  },
-];
+import { ProgramSelectionCard } from "../../components/project/ProgramSelectionCard";
+import { TemplateIntroCard } from "../../components/project/TemplateIntroCard";
+import { DynamicProjectForm } from "../../components/project/DynamicProjectForm";
+import { PROGRAM_TEMPLATES } from "../../data/programTemplates";
+import { AiPanel } from "../../components/dashboard/AiPanel";
 
 const ALL_IDES = [
   { id: "vscode", label: "VS Code", icon: "💻" },
@@ -281,63 +133,108 @@ function IdeSelector({ selectedIde, onChange }) {
   );
 }
 
-function AiPanel({ stepLabel }) {
-  return (
-    <div className="sticky top-6 space-y-4">
-      <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="text-sm font-semibold text-slate-900">
-            AI Önerileri
-          </div>
-          <span className="rounded-full bg-[#EFF5FF] px-3 py-1 text-xs font-semibold text-[#185ED8]">
-            {stepLabel}
-          </span>
-        </div>
+function ProgramSelection({ onNext }) {
+  const [selectedProgramId, setSelectedProgramId] = useState(null);
 
-        <ul className="mt-4 space-y-2 text-sm text-slate-600">
-          <li>• Bu adım için kriterlere göre 3 öneri gösterilecek.</li>
-          <li>• Eksik alanlar tespit edilip “Uygula” ile editöre yazılacak.</li>
-          <li>• Her öneri “Neden?” açıklaması + geri al (undo) destekler.</li>
-        </ul>
+  const handleNext = () => {
+    const prog = PROGRAM_TEMPLATES.find((p) => p.id === selectedProgramId);
+    if (prog) {
+      onNext(selectedProgramId, prog.templateType);
+    }
+  };
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="border-b border-slate-100 pb-5">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+          Program ve Şablon Seçimi
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Projenizin başvuracağı kurumu ve programı seçerek yapay zekanın ilgili
+          kılavuz kurallarına göre çalışmasını sağlayın.
+        </p>
       </div>
 
-      <button className="w-full rounded-3xl bg-[#185ED8] px-5 py-4 text-sm font-semibold text-white hover:bg-[#1554C3]">
-        Geliştir
-      </button>
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {PROGRAM_TEMPLATES.map((prog) => (
+          <ProgramSelectionCard
+            key={prog.id}
+            prog={prog}
+            isSelected={selectedProgramId === prog.id}
+            onSelect={() => setSelectedProgramId(prog.id)}
+          />
+        ))}
+      </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="text-sm font-semibold text-slate-900">Yazım Modu</div>
-        <div className="mt-3 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-          <div>
-            <div className="text-sm font-medium text-slate-900">
-              Daha teknik yaz
-            </div>
-            <div className="text-xs text-slate-500">
-              Terminoloji + KPI odaklı
-            </div>
-          </div>
-          <button className="rounded-full bg-[#EFF5FF] px-4 py-2 text-xs font-semibold text-[#185ED8] hover:bg-[#CFE0FF]">
-            Aç
-          </button>
-        </div>
+      <div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
+        <button
+          disabled={!selectedProgramId}
+          onClick={handleNext}
+          className="rounded-full bg-[#1B5CFF] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1554C3] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Şablonu Seç ve İlerle
+        </button>
       </div>
     </div>
   );
 }
 
-function StepContent({ stepId, onNext, setActiveProjectName, addProject }) {
+function StepContent({
+  stepId,
+  onNext,
+  setActiveProjectName,
+  addProject,
+  selectedProgramId,
+  setSelectedProgramId,
+  templateType,
+  setTemplateType,
+  handleBack,
+}) {
+  const currentProg = useMemo(
+    () => PROGRAM_TEMPLATES.find((p) => p.id === selectedProgramId),
+    [selectedProgramId],
+  );
+
   if (stepId === "program") {
-    return <ProgramSelection onNext={onNext} />;
+    if (!templateType) {
+      return (
+        <ProgramSelection
+          onNext={(progId, tType) => {
+            setSelectedProgramId(progId);
+            setTemplateType(tType);
+          }}
+        />
+      );
+    }
+
+    return (
+      <TemplateIntroCard
+        prog={currentProg}
+        onBack={() => setTemplateType(null)}
+        onContinue={onNext}
+      />
+    );
   }
 
   if (stepId === "setup") {
     return (
-      <ProjectSetup
-        onNext={(name, desc) => {
-          setActiveProjectName(name);
-          addProject(name, desc);
+      <DynamicProjectForm
+        templateType={templateType}
+        onNext={(formData) => {
+          setActiveProjectName(
+            formData.girisimAdi ||
+            formData.projeAdi ||
+            formData.sirketAdi ||
+            formData.kurumAdi ||
+            "Yeni Proje",
+          );
+          addProject(
+            formData.girisimAdi || formData.projeAdi || "Yeni Proje",
+            "Draft",
+          );
           onNext();
         }}
+        onSave={(draft) => console.log("Taslak kaydedildi:", draft)}
       />
     );
   }
@@ -346,26 +243,15 @@ function StepContent({ stepId, onNext, setActiveProjectName, addProject }) {
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-slate-900">Adım: {stepId}</h2>
       <p className="mt-2 text-sm text-slate-600">
-        Buraya bu adımın gerçek form/editör UI’sı gelecek.
+        Gerçek başvuru formu oluşturuldu. Artık AI modasıyla baş başayız.
       </p>
 
-      <div className="mt-6 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-        <div className="font-semibold text-slate-900">Teknik not</div>
-        <div className="mt-1">
-          Bu alan wizard state’e bağlı olacak (autosave, validation,
-          versioning).
-        </div>
-      </div>
-
       <div className="mt-6 flex items-center justify-between">
-        <button className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-          Geri
-        </button>
         <button
-          onClick={onNext}
-          className="rounded-full bg-[#185ED8] px-6 py-2 text-sm font-semibold text-white hover:bg-[#1554C3]"
+          onClick={handleBack}
+          className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
         >
-          Devam
+          Geri
         </button>
       </div>
     </div>
@@ -386,10 +272,20 @@ export default function NewProject() {
     [activeStepId, PROJECT_STEPS],
   );
 
+  const [selectedProgramId, setSelectedProgramId] = useState(null);
+  const [templateType, setTemplateType] = useState(null);
+
   const handleNext = () => {
     const currentIndex = PROJECT_STEPS.findIndex((s) => s.id === activeStepId);
     if (currentIndex < PROJECT_STEPS.length - 1) {
       setActiveStepId(PROJECT_STEPS[currentIndex + 1].id);
+    }
+  };
+
+  const handleBack = () => {
+    const currentIndex = PROJECT_STEPS.findIndex((s) => s.id === activeStepId);
+    if (currentIndex > 0) {
+      setActiveStepId(PROJECT_STEPS[currentIndex - 1].id);
     }
   };
 
@@ -398,12 +294,17 @@ export default function NewProject() {
       <StepContent
         stepId={activeStepId}
         onNext={handleNext}
+        handleBack={handleBack}
         setActiveProjectName={setActiveProjectName}
         addProject={addProject}
+        selectedProgramId={selectedProgramId}
+        setSelectedProgramId={setSelectedProgramId}
+        templateType={templateType}
+        setTemplateType={setTemplateType}
       />
 
       <div className="flex flex-col gap-6">
-        <AiPanel stepLabel={activeLabel} />
+        <AiPanel stepLabel={activeLabel} templateType={templateType} />
       </div>
     </div>
   );
@@ -570,94 +471,6 @@ function ProjectSetup({ onNext }) {
           className="rounded-full bg-[#1B5CFF] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1554C3] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Projeyi Başlat ve Devam Et
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ProgramSelection({ onNext }) {
-  const [selectedProgram, setSelectedProgram] = useState(null);
-
-  return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="border-b border-slate-100 pb-5">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
-          Program ve Şablon Seçimi
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Projenizin başvuracağı kurumu ve programı seçerek yapay zekanın ilgili
-          kılavuz kurallarına ve puanlama metriklerine göre çalışmasını
-          sağlayın.
-        </p>
-      </div>
-
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {PROGRAMS.map((prog) => {
-          const isSelected = selectedProgram === prog.id;
-          return (
-            <div
-              key={prog.id}
-              onClick={() => setSelectedProgram(prog.id)}
-              className={`group relative cursor-pointer rounded-2xl border p-5 transition-all duration-200 ${isSelected
-                ? "border-[#1B5CFF] bg-[#F4F7FF] shadow-[0_0_0_1px_#1B5CFF]"
-                : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
-                }`}
-            >
-              <div className="flex items-start justify-between">
-                <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl border ${prog.color} shadow-sm transition-transform group-hover:scale-110`}
-                >
-                  {prog.icon}
-                </div>
-                {prog.badge && (
-                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-slate-600 uppercase">
-                    {prog.badge}
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-4">
-                <h3
-                  className={`font-semibold ${isSelected ? "text-[#1B5CFF]" : "text-slate-900"
-                    }`}
-                >
-                  {prog.name}
-                </h3>
-                <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
-                  {prog.desc}
-                </p>
-              </div>
-
-              {isSelected && (
-                <div className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#1B5CFF] text-white shadow-sm ring-2 ring-white">
-                  <svg
-                    className="h-3.5 w-3.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
-        <button
-          disabled={!selectedProgram}
-          onClick={() => onNext()}
-          className="rounded-full bg-[#1B5CFF] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1554C3] disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Şablonu Seç ve İlerle
         </button>
       </div>
     </div>
