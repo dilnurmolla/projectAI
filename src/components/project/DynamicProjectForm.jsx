@@ -1,43 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { FORM_SCHEMAS } from "../../data/formSchemas";
+import { COMMON_FORM_SECTIONS, FORM_SCHEMAS } from "../../data/formSchemas";
 import { FormSectionRenderer } from "./FormSectionRenderer";
 
 export function DynamicProjectForm({
     templateType,
+    selectedCallId,
+    activeStepId,
     initialData = {},
     onSave,
     onNext,
+    onBack,
 }) {
     const schema = FORM_SCHEMAS[templateType];
-    const draftKey = `projectAI_draft_${templateType}`;
+    const draftKey = `projectAI_draft_${templateType}_${selectedCallId || 'default'}`;
 
     const [formData, setFormData] = useState(() => {
         try {
             const savedDraft = localStorage.getItem(draftKey);
             if (savedDraft) return JSON.parse(savedDraft);
-        } catch (e) { }
+        } catch {
+            localStorage.removeItem(draftKey);
+        }
         return initialData;
     });
 
-    // Auto-save effectively
     useEffect(() => {
         if (Object.keys(formData).length > 0) {
             localStorage.setItem(draftKey, JSON.stringify(formData));
         }
     }, [formData, draftKey]);
-
-    // If the templateType changes (e.g., user went back and selected a different template), reset the form data from saved draft or initialData
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
-        try {
-            const savedDraft = localStorage.getItem(draftKey);
-            if (savedDraft) {
-                setFormData(JSON.parse(savedDraft));
-                return;
-            }
-        } catch (e) { }
-        setFormData(initialData || {});
-    }, [templateType, draftKey]);
 
     if (!schema) {
         return (
@@ -61,26 +52,54 @@ export function DynamicProjectForm({
     const handleSubmit = (e) => {
         e.preventDefault();
         localStorage.removeItem(draftKey);
-        if (onNext) onNext(formData);
+        if (onNext) onNext(formData, selectedCallId);
     };
+
+    const templateSections = schema.sections || [];
+    const mergedSections = [...COMMON_FORM_SECTIONS, ...templateSections].filter(
+        (section, index, allSections) =>
+            allSections.findIndex((item) => item.id === section.id) === index,
+    );
+    const visibleSections = mergedSections.filter(
+        (section) => section.stepId === activeStepId,
+    );
+    const hasVisibleSections = visibleSections && visibleSections.length > 0;
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            <div className="mb-2">
-                <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
-                    {schema.title}
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">{schema.description}</p>
+            <div className="flex justify-between items-center mb-2 pb-5 border-b border-slate-100">
+                <div>
+                    <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+                        {schema.title}
+                    </h2>
+                    <p className="mt-1 text-sm text-slate-500">{schema.description}</p>
+                </div>
+                {onBack && (
+                    <button
+                        type="button"
+                        onClick={onBack}
+                        className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
+                    >
+                        Geri (Çağrıya Dön)
+                    </button>
+                )}
             </div>
 
-            {schema.sections?.map((section) => (
-                <FormSectionRenderer
-                    key={section.id}
-                    section={section}
-                    formData={formData}
-                    onChangeField={handleChangeField}
-                />
-            ))}
+            {!hasVisibleSections && (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
+                    Bu adım için gösterilecek form bölümü bulunamadı.
+                </div>
+            )}
+
+            {hasVisibleSections &&
+                visibleSections.map((section) => (
+                    <FormSectionRenderer
+                        key={section.id}
+                        section={section}
+                        formData={formData}
+                        onChangeField={handleChangeField}
+                    />
+                ))}
 
             <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-6">
                 <button

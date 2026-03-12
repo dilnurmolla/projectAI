@@ -5,6 +5,7 @@ import { TemplateIntroCard } from "../../components/project/TemplateIntroCard";
 import { DynamicProjectForm } from "../../components/project/DynamicProjectForm";
 import { PROGRAM_TEMPLATES } from "../../data/programTemplates";
 import { AiPanel } from "../../components/dashboard/AiPanel";
+import { CallSelectionView } from "../../components/project/CallSelectionView";
 
 const ALL_IDES = [
   { id: "vscode", label: "VS Code", icon: "💻" },
@@ -99,10 +100,11 @@ function IdeSelector({ selectedIde, onChange }) {
                     setIsOpen(false);
                     setSearchTerm("");
                   }}
-                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${selectedIde === ide.id
-                    ? "bg-[#EFF5FF] text-[#1B5CFF] font-medium"
-                    : "text-slate-700 hover:bg-slate-50"
-                    }`}
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
+                    selectedIde === ide.id
+                      ? "bg-[#EFF5FF] text-[#1B5CFF] font-medium"
+                      : "text-slate-700 hover:bg-slate-50"
+                  }`}
                 >
                   <span className="text-lg">{ide.icon}</span>
                   <span>{ide.label}</span>
@@ -139,7 +141,7 @@ function ProgramSelection({ onNext }) {
   const handleNext = () => {
     const prog = PROGRAM_TEMPLATES.find((p) => p.id === selectedProgramId);
     if (prog) {
-      onNext(selectedProgramId, prog.templateType);
+      onNext(selectedProgramId);
     }
   };
 
@@ -187,7 +189,8 @@ function StepContent({
   selectedProgramId,
   setSelectedProgramId,
   templateType,
-  setTemplateType,
+  selectedCallId,
+  setSelectedCallId,
   handleBack,
 }) {
   const currentProg = useMemo(
@@ -199,9 +202,8 @@ function StepContent({
     if (!templateType) {
       return (
         <ProgramSelection
-          onNext={(progId, tType) => {
+          onNext={(progId) => {
             setSelectedProgramId(progId);
-            setTemplateType(tType);
           }}
         />
       );
@@ -210,7 +212,7 @@ function StepContent({
     return (
       <TemplateIntroCard
         prog={currentProg}
-        onBack={() => setTemplateType(null)}
+        onBack={() => setSelectedProgramId(null)}
         onContinue={onNext}
       />
     );
@@ -218,22 +220,49 @@ function StepContent({
 
   if (stepId === "setup") {
     return (
-      <DynamicProjectForm
+        <ProjectSetup
+          onNext={(formData) => {
+            setActiveProjectName(formData || "Yeni Proje");
+            addProject(formData || "Yeni Proje", "Draft");
+            onNext();
+          }}
+          onBack={handleBack}
+        />
+    );
+  }
+
+  if (stepId === "call") {
+    return (
+      <CallSelectionView
         templateType={templateType}
-        onNext={(formData) => {
-          setActiveProjectName(
-            formData.girisimAdi ||
-            formData.projeAdi ||
-            formData.sirketAdi ||
-            formData.kurumAdi ||
-            "Yeni Proje",
-          );
-          addProject(
-            formData.girisimAdi || formData.projeAdi || "Yeni Proje",
-            "Draft",
-          );
+        initialCallId={selectedCallId}
+        onNext={(callData) => {
+          setSelectedCallId(callData?.id || "custom");
           onNext();
         }}
+        onBack={handleBack}
+      />
+    );
+  }
+
+  const isFormStep = [
+    "company",
+    "problem",
+    "solution",
+    "innovation",
+    "budget",
+    "risks",
+    "impact",
+  ].includes(stepId);
+
+  if (isFormStep) {
+    return (
+      <DynamicProjectForm
+        key={`${templateType}-${selectedCallId || "default"}`}
+        templateType={templateType}
+        selectedCallId={selectedCallId}
+        activeStepId={stepId}
+        onNext={onNext}
         onSave={(draft) => console.log("Taslak kaydedildi:", draft)}
       />
     );
@@ -273,7 +302,13 @@ export default function NewProject() {
   );
 
   const [selectedProgramId, setSelectedProgramId] = useState(null);
-  const [templateType, setTemplateType] = useState(null);
+  const [selectedCallId, setSelectedCallId] = useState(null);
+
+  const selectedProgram = useMemo(
+    () => PROGRAM_TEMPLATES.find((p) => p.id === selectedProgramId),
+    [selectedProgramId],
+  );
+  const resolvedTemplateType = selectedProgram?.templateType || null;
 
   const handleNext = () => {
     const currentIndex = PROJECT_STEPS.findIndex((s) => s.id === activeStepId);
@@ -290,7 +325,9 @@ export default function NewProject() {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+    <div
+      className={`grid gap-6 ${activeStepId === "call" ? "lg:grid-cols-1" : "lg:grid-cols-[1fr_320px]"}`}
+    >
       <StepContent
         stepId={activeStepId}
         onNext={handleNext}
@@ -299,18 +336,21 @@ export default function NewProject() {
         addProject={addProject}
         selectedProgramId={selectedProgramId}
         setSelectedProgramId={setSelectedProgramId}
-        templateType={templateType}
-        setTemplateType={setTemplateType}
+        templateType={resolvedTemplateType}
+        selectedCallId={selectedCallId}
+        setSelectedCallId={setSelectedCallId}
       />
 
-      <div className="flex flex-col gap-6">
-        <AiPanel stepLabel={activeLabel} templateType={templateType} />
-      </div>
+      {activeStepId !== "call" && (
+        <div className="flex flex-col gap-6">
+          <AiPanel stepLabel={activeLabel} templateType={resolvedTemplateType} />
+        </div>
+      )}
     </div>
   );
 }
 
-function ProjectSetup({ onNext }) {
+function ProjectSetup({ onNext, onBack }) {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedIde, setSelectedIde] = useState("vscode");
@@ -385,10 +425,11 @@ function ProjectSetup({ onNext }) {
           <h3 className="text-sm font-semibold text-slate-900">Proje Durumu</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label
-              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${projectType === "scratch"
-                ? "border-[#1B5CFF] bg-[#EFF5FF]"
-                : "border-slate-200 bg-white hover:bg-slate-50"
-                }`}
+              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${
+                projectType === "scratch"
+                  ? "border-[#1B5CFF] bg-[#EFF5FF]"
+                  : "border-slate-200 bg-white hover:bg-slate-50"
+              }`}
             >
               <input
                 type="radio"
@@ -400,10 +441,11 @@ function ProjectSetup({ onNext }) {
               />
               <div className="flex w-full items-start gap-3">
                 <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${projectType === "scratch"
-                    ? "border-[#1B5CFF] bg-[#1B5CFF]"
-                    : "border-slate-300 bg-white"
-                    }`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                    projectType === "scratch"
+                      ? "border-[#1B5CFF] bg-[#1B5CFF]"
+                      : "border-slate-300 bg-white"
+                  }`}
                 >
                   <div
                     className={`h-2 w-2 rounded-full ${projectType === "scratch" ? "bg-white" : "bg-transparent"}`}
@@ -423,10 +465,11 @@ function ProjectSetup({ onNext }) {
             </label>
 
             <label
-              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${projectType === "existing"
-                ? "border-[#1B5CFF] bg-[#EFF5FF]"
-                : "border-slate-200 bg-white hover:bg-slate-50"
-                }`}
+              className={`relative flex cursor-pointer rounded-xl border p-4 transition-all ${
+                projectType === "existing"
+                  ? "border-[#1B5CFF] bg-[#EFF5FF]"
+                  : "border-slate-200 bg-white hover:bg-slate-50"
+              }`}
             >
               <input
                 type="radio"
@@ -438,10 +481,11 @@ function ProjectSetup({ onNext }) {
               />
               <div className="flex w-full items-start gap-3">
                 <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${projectType === "existing"
-                    ? "border-[#1B5CFF] bg-[#1B5CFF]"
-                    : "border-slate-300 bg-white"
-                    }`}
+                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                    projectType === "existing"
+                      ? "border-[#1B5CFF] bg-[#1B5CFF]"
+                      : "border-slate-300 bg-white"
+                  }`}
                 >
                   <div
                     className={`h-2 w-2 rounded-full ${projectType === "existing" ? "bg-white" : "bg-transparent"}`}
@@ -464,7 +508,13 @@ function ProjectSetup({ onNext }) {
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
+      <div className="mt-8 flex items-center justify-between border-t border-slate-100 pt-5">
+        <button
+          onClick={onBack}
+          className="rounded-full border border-slate-300 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+        >
+          Geri
+        </button>
         <button
           disabled={!projectName.trim()}
           onClick={() => onNext(projectName, description)}
