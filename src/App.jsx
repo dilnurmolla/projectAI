@@ -10,6 +10,7 @@ import Projects from "./pages/dashboard/Projects";
 import Templates from "./pages/dashboard/Templates";
 import Score from "./pages/dashboard/Score";
 import Outputs from "./pages/dashboard/Outputs";
+import AccountSettings from "./pages/dashboard/AccountSettings";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="templates" element={<Templates />} />
             <Route path="score" element={<Score />} />
             <Route path="outputs" element={<Outputs />} />
+            <Route path="account" element={<AccountSettings />} />
           </Route>
         </Route>
       </Routes>

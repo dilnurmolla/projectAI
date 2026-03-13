@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useProject } from "../../context/ProjectContext";
+import { useProject } from "../../context/useProject";
 import { PROJECT_STEPS } from "../../data/projectSteps";
 
 export default function Projects() {

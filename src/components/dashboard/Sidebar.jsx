@@ -1,5 +1,6 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useProject } from "../../context/ProjectContext";
+import { useProject } from "../../context/useProject";
+import { logoutUser } from "../../utils/accountStorage";
 
 const itemBase =
   "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition";
@@ -31,21 +32,11 @@ function SidebarLink({ to, children }) {
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-
-  let activeStepId = null;
-  let setActiveStepId = () => {};
-  let PROJECT_STEPS = [];
-  let activeProjectName = null;
-  try {
-    const projectContext = useProject();
-    activeStepId = projectContext.activeStepId;
-    setActiveStepId = projectContext.setActiveStepId;
-    PROJECT_STEPS = projectContext.PROJECT_STEPS;
-    activeProjectName = projectContext.activeProjectName;
-  } catch (error) {}
+  const { activeStepId, setActiveStepId, PROJECT_STEPS, activeProjectName } =
+    useProject();
 
   const handleLogout = () => {
-    localStorage.removeItem("projectAI_auth");
+    logoutUser();
     navigate("/login");
   };
 

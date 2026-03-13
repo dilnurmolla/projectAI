@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { getActiveAuthEmail } from "../utils/accountStorage";
 
 export default function ProtectedRoute() {
-  const authEmail = localStorage.getItem("projectAI_auth");
+  const authEmail = getActiveAuthEmail();
 
   if (!authEmail) {
     return <Navigate to="/login" replace />;

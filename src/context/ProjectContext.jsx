@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PROJECT_STEPS } from "../data/projectSteps";
-
-const ProjectContext = createContext();
+import { ProjectContext } from "./projectContextInstance";
 
 export function ProjectProvider({ children }) {
   const [activeStepId, setActiveStepId] = useState(PROJECT_STEPS[0].id);
@@ -12,7 +11,7 @@ export function ProjectProvider({ children }) {
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
+      } catch {
         return [];
       }
     }
@@ -51,12 +50,4 @@ export function ProjectProvider({ children }) {
   return (
     <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
   );
-}
-
-export function useProject() {
-  const context = useContext(ProjectContext);
-  if (!context) {
-    throw new Error("useProject must be used within a ProjectProvider");
-  }
-  return context;
 }
